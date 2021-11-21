@@ -251,10 +251,16 @@ public class Controller implements AsyncProcessor {
         int successCount = 0;
         for (char c : text.toCharArray()) {
             if (!injectChar(c)) {
-                Ln.w("Could not inject char u+" + String.format("%04x", (int) c));
-                continue;
+                    continue;
             }
             successCount++;
+        }
+        if (successCount == 0) {
+            if (device.injectViaAdbKeyboard(text)) {
+                return text.length();
+            } else {
+                Ln.w("Could not inject text " + text);
+            }
         }
         return successCount;
     }
