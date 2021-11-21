@@ -15,9 +15,11 @@ import java.util.Map;
  */
 public final class KeyComposition {
 
-    private static final String KEY_DEAD_GRAVE = "\u0300";
     private static final String KEY_DEAD_ACUTE = "\u0301";
+    private static final String KEY_DEAD_BREVE = "\u0306"; // ă Ă
     private static final String KEY_DEAD_CIRCUMFLEX = "\u0302";
+    private static final String KEY_DEAD_COMMA_BELOW = "\u0326"; // ș Ș ț Ț
+    private static final String KEY_DEAD_GRAVE = "\u0300";
     private static final String KEY_DEAD_TILDE = "\u0303";
     private static final String KEY_DEAD_UMLAUT = "\u0308";
 
@@ -49,6 +51,14 @@ public final class KeyComposition {
 
     private static String umlaut(char c) {
         return KEY_DEAD_UMLAUT + c;
+    }
+
+    private static String commaBelow(char c) {
+        return KEY_DEAD_COMMA_BELOW + c;
+    }
+
+    private static String breve(char c) {
+        return KEY_DEAD_BREVE + c;
     }
 
     private static Map<Character, String> createDecompositionMap() {
@@ -168,6 +178,14 @@ public final class KeyComposition {
         map.put('Ẍ', umlaut('X'));
         map.put('ẍ', umlaut('x'));
         map.put('ẗ', umlaut('t'));
+
+        map.put('Ă', breve('A'));
+        map.put('ă', breve('a'));
+
+        map.put('Ș', commaBelow('S'));
+        map.put('ș', commaBelow('s'));
+        map.put('Ț', commaBelow('T'));
+        map.put('ț', commaBelow('t'));
 
         return map;
     }
