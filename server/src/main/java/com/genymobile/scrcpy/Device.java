@@ -19,6 +19,9 @@ import android.view.InputEvent;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class Device {
@@ -239,6 +242,40 @@ public final class Device {
 
     public boolean injectKeyEvent(int action, int keyCode, int repeat, int metaState, int injectMode) {
         return injectKeyEvent(action, keyCode, repeat, metaState, displayId, injectMode);
+    }
+
+    /**
+     * @param text the text to inject via ADB Keyboard
+     * @return true if the text was successfully injected, false otherwise
+     */
+    public boolean injectViaAdbKeyboard(String text) {
+        try {
+            Runtime runtime = Runtime.getRuntime();
+            Process checkImeProc = runtime.exec("settings get secure default_input_method");
+            String selectedIme = null;
+            try (BufferedReader checkImeInput = new BufferedReader(
+                new InputStreamReader(checkImeProc.getInputStream()))) {
+                String line;
+                while ((line = checkImeInput.readLine()) != null) {
+                    if (selectedIme != null) {
+                        Ln.e("Found multiple IME");
+                        return false;
+                    }
+                    selectedIme = line;
+                }
+            }
+            if (Objects.equals(selectedIme, "com.android.adbkeyboard/.AdbIME")) {
+                Process broadcastProc = runtime.exec(
+                    "am broadcast -a ADB_INPUT_TEXT --es msg " + text);
+                return broadcastProc.waitFor() == 0;
+            } else {
+                Ln.i("ADB Keyboard needs to be installed and selected as default input to send text through it");
+            }
+            return false;
+        } catch (Throwable throwable) {
+            Ln.e("Encountered error while trying ti send char  through IME", throwable);
+            return false;
+        }
     }
 
     public static boolean pressReleaseKeycode(int keyCode, int displayId, int injectMode) {

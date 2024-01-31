@@ -664,7 +664,7 @@ sc_input_manager_process_mouse_button(struct sc_input_manager *im,
         if (controller) {
             enum sc_action action = down ? SC_ACTION_DOWN : SC_ACTION_UP;
 
-            if (event->button == SDL_BUTTON_X1) {
+            if (event->button == 7) {
                 action_app_switch(controller, action);
                 return;
             }
@@ -676,7 +676,7 @@ sc_input_manager_process_mouse_button(struct sc_input_manager *im,
                 }
                 return;
             }
-            if (event->button == SDL_BUTTON_RIGHT) {
+            if (event->button == SDL_BUTTON_RIGHT || event->button == SDL_BUTTON_X1) {
                 press_back_or_turn_screen_on(controller, action);
                 return;
             }
