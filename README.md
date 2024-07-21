@@ -68,6 +68,22 @@ option is set.
 
 Note that USB debugging is not required to run scrcpy in [OTG mode](doc/otg.md).
 
+### MacOS
+```bash
+brew install meson
+```
+```bash
+brew install cmake
+```
+```bash
+brew install pkg-config
+```
+```bash
+brew install ffmpeg
+```
+```bash
+brew install libusb
+```
 
 ## Get the app
 
